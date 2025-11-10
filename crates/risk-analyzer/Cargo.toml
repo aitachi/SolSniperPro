@@ -1,0 +1,14 @@
+[package]
+name = "solsniper-risk-analyzer"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+solsniper-core = { path = "../core" }
+solsniper-ml-model = { path = "../ml-model" }
+solsniper-behavior-pattern = { path = "../behavior-pattern" }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+serde = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }

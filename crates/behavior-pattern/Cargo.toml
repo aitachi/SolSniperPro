@@ -1,0 +1,15 @@
+[package]
+name = "solsniper-behavior-pattern"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+solsniper-core = { path = "../core" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+chrono = { workspace = true }
+sqlx = { workspace = true }
+solana-sdk = { workspace = true }

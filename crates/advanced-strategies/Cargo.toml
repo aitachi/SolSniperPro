@@ -1,0 +1,20 @@
+[package]
+name = "solsniper-advanced-strategies"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+solsniper-core = { path = "../core" }
+solsniper-trading-engine = { path = "../trading-engine" }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+solana-client = { workspace = true }
+solana-sdk = { workspace = true }
+reqwest = { workspace = true }
+futures = { workspace = true }
+dashmap = { workspace = true }
+chrono = { workspace = true }

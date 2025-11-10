@@ -1,0 +1,31 @@
+# Rust
+target/
+**/*.rs.bk
+*.pdb
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+*.log
+
+# AI
+.claude/
+.claude.json
+.cursor/
+.codeium/
+
+# Build
+*.exe
+*.dll
+*.so
+*.dylib

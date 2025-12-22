@@ -1,5 +1,12 @@
 # SolSniper Pro - 部署运维文档
 ---
+---
+
+**Author**: Aitachi
+**Email**: 44158892@qq.com
+**Wechat**: 18116011230
+
+---
 
 **Author**: Aitachi
 **Email**: 44158892@qq.com

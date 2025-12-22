@@ -27,11 +27,11 @@ Thumbs.db
 .env.production
 *.log
 
-# AI
-.claude/
-.claude.json
+# AI & Editor
 .cursor/
 .codeium/
+.ai/
+*.ai.json
 
 # Build
 *.exe

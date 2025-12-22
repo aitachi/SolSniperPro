@@ -1,15 +1,9 @@
 # SolSniper Pro - API 接口文档
----
----
-
-**Author**: Aitachi
-**Email**: 44158892@qq.com
-**Wechat**: 18116011230
 
 ---
 
-**Author**: Aitachi
-**Email**: 44158892@qq.com
+**Author**: Aitachi  
+**Email**: 44158892@qq.com  
 **Wechat**: 18116011230
 
 ---
@@ -17,9 +11,6 @@
 **版本**: v2.0
 **日期**: 2025-12-21
 **Base URL**: `http://localhost:3000/api/v1`
-
----
-
 ## 目录
 
 1. [认证](#认证)
@@ -32,9 +23,6 @@
 8. [系统配置 API](#系统配置-api)
 9. [WebSocket API](#websocket-api)
 10. [错误码](#错误码)
-
----
-
 ## 认证
 
 ### JWT Token认证
@@ -72,9 +60,6 @@ Authorization: Bearer <your_jwt_token>
   }
 }
 ```
-
----
-
 ## 通用规范
 
 ### 请求格式
@@ -129,9 +114,6 @@ Authorization: Bearer <your_jwt_token>
   }
 }
 ```
-
----
-
 ## 代币管理 API
 
 ### 1. 获取代币列表
@@ -268,9 +250,6 @@ Authorization: Bearer <your_jwt_token>
   }
 }
 ```
-
----
-
 ## 策略管理 API
 
 ### 1. 获取策略列表
@@ -391,9 +370,6 @@ Authorization: Bearer <your_jwt_token>
   }
 }
 ```
-
----
-
 ## 交易管理 API
 
 ### 1. 获取交易历史
@@ -548,9 +524,6 @@ Authorization: Bearer <your_jwt_token>
   }
 }
 ```
-
----
-
 ## 风险控制 API
 
 ### 1. 获取风险配置
@@ -631,9 +604,6 @@ Authorization: Bearer <your_jwt_token>
   }
 }
 ```
-
----
-
 ## 监控指标 API
 
 ### 1. 获取系统健康状态
@@ -758,9 +728,6 @@ solsniper_win_rate 0.66
 # TYPE solsniper_total_pnl_sol gauge
 solsniper_total_pnl_sol 125.5
 ```
-
----
-
 ## 系统配置 API
 
 ### 1. 获取系统配置
@@ -819,9 +786,6 @@ solsniper_total_pnl_sol 125.5
   }
 }
 ```
-
----
-
 ## WebSocket API
 
 ### 连接
@@ -969,9 +933,6 @@ ws://localhost:3000/ws?token=<your_jwt_token>
   "type": "pong"
 }
 ```
-
----
-
 ## 错误码
 
 | 错误码 | HTTP状态 | 说明 |
@@ -991,9 +952,6 @@ ws://localhost:3000/ws?token=<your_jwt_token>
 | `POSITION_LIMIT_EXCEEDED` | 400 | 持仓限制超限 |
 | `RISK_CHECK_FAILED` | 403 | 风险检查未通过 |
 | `BLACKLISTED` | 403 | 在黑名单中 |
-
----
-
 ## Rate Limiting
 
 ### 限制规则
@@ -1025,9 +983,6 @@ X-RateLimit-Reset: 1703145660
   }
 }
 ```
-
----
-
 ## SDK 示例
 
 ### JavaScript/TypeScript
@@ -1074,8 +1029,5 @@ ws.on('message', (data) => {
   console.log('Received:', message);
 });
 ```
-
----
-
 **API 版本**: v1.0.0
 **最后更新**: 2025-12-21

@@ -1,14 +1,9 @@
 # SolSniper Pro - Quick Start Guide
----
-
-**Author**: Aitachi
-**Email**: 44158892@qq.com
-**Wechat**: 18116011230
 
 ---
 
-**Author**: Aitachi
-**Email**: 44158892@qq.com
+**Author**: Aitachi  
+**Email**: 44158892@qq.com  
 **Wechat**: 18116011230
 
 ---
@@ -24,9 +19,6 @@
 - PostgreSQL 16 (via Docker or local)
 - Redis 7 (via Docker or local)
 - Kafka (via Docker or local)
-
----
-
 ## 🚀 Quick Start (Automated)
 
 ### Option 1: Using the Startup Script
@@ -88,9 +80,6 @@ Default Login:
 
 =====================================
 ```
-
----
-
 ## 🔧 Manual Setup (Step by Step)
 
 ### Step 1: Start Infrastructure
@@ -198,9 +187,6 @@ VITE v5.0.8  ready in 324 ms
 ➜  Local:   http://localhost:5173/
 ➜  Network: http://192.168.1.100:5173/
 ```
-
----
-
 ## 📱 Accessing the Application
 
 ### 1. Open Browser
@@ -224,9 +210,6 @@ Password: admin123
 - **Risk Control** - Configure risk settings
 - **Analytics** - Performance analysis
 - **Settings** - User preferences
-
----
-
 ## 🛠️ Troubleshooting
 
 ### Backend Won't Start
@@ -295,9 +278,6 @@ docker-compose up -d postgres
 # Re-initialize
 psql -h localhost -U solsniper -d solsniper_db -f scripts/init_db.sql
 ```
-
----
-
 ## 🛑 Stopping the System
 
 ### Stop Everything
@@ -320,9 +300,6 @@ docker-compose down
 # Or stop and remove volumes
 docker-compose down -v
 ```
-
----
-
 ## 📊 System Monitoring
 
 ### Check Logs
@@ -360,9 +337,6 @@ curl http://localhost:3000/api/v1/health
 # Check system metrics
 curl http://localhost:3000/api/v1/metrics/summary
 ```
-
----
-
 ## 🔐 Security Checklist
 
 Before deploying to production:
@@ -377,9 +351,6 @@ Before deploying to production:
 - [ ] Review CORS configuration
 - [ ] Implement backup strategy
 - [ ] Update default admin password
-
----
-
 ## 📚 Additional Resources
 
 - **Architecture Documentation**: `docs/01_SYSTEM_ARCHITECTURE.md`
@@ -388,9 +359,6 @@ Before deploying to production:
 - **Deployment Guide**: `docs/04_DEPLOYMENT_GUIDE.md`
 - **Frontend Architecture**: `docs/05_FRONTEND_ARCHITECTURE.md`
 - **Implementation Summary**: `docs/06_FRONTEND_IMPLEMENTATION_SUMMARY.md`
-
----
-
 ## 🆘 Getting Help
 
 ### Check Documentation
@@ -408,9 +376,6 @@ Before deploying to production:
 | Database error | Verify credentials and connection |
 | Build fails | Clear cache: `cargo clean && npm clean-install` |
 | WebSocket error | Check backend is running and accessible |
-
----
-
 ## ✅ Success Indicators
 
 Your system is working correctly when:
@@ -423,9 +388,6 @@ Your system is working correctly when:
 6. ✅ Dashboard displays metrics (even if zero)
 7. ✅ Navigation between pages works
 8. ✅ Real-time updates appear (check console)
-
----
-
 ## 🚀 Next Steps
 
 After successful startup:
@@ -451,15 +413,9 @@ After successful startup:
    - Monitor active positions
    - Track PnL in real-time
    - Check recent trades
-
----
-
 **Happy Trading! 🚀📈**
 
 For issues, check logs and documentation.
 For feature requests, update strategy configurations.
-
----
-
 **Document Version**: v2.0.0
 **Last Updated**: 2025-12-21

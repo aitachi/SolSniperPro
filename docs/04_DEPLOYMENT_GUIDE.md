@@ -1,24 +1,15 @@
 # SolSniper Pro - 部署运维文档
----
----
-
-**Author**: Aitachi
-**Email**: 44158892@qq.com
-**Wechat**: 18116011230
 
 ---
 
-**Author**: Aitachi
-**Email**: 44158892@qq.com
+**Author**: Aitachi  
+**Email**: 44158892@qq.com  
 **Wechat**: 18116011230
 
 ---
 
 **版本**: v2.0
 **日期**: 2025-12-21
-
----
-
 ## 目录
 
 1. [系统要求](#系统要求)
@@ -30,9 +21,6 @@
 7. [故障排查](#故障排查)
 8. [备份和恢复](#备份和恢复)
 9. [性能优化](#性能优化)
-
----
-
 ## 系统要求
 
 ### 硬件要求
@@ -59,9 +47,6 @@
 | **Node.js** | 18.x+ | 前端构建 |
 | **Docker** | 24.0+ | 容器化（可选） |
 | **Docker Compose** | 2.20+ | 服务编排（可选） |
-
----
-
 ## 依赖服务安装
 
 ### 1. Kafka 安装
@@ -260,9 +245,6 @@ docker-compose ps
 # 查看日志
 docker-compose logs -f
 ```
-
----
-
 ## 项目部署
 
 ### 1. 获取代码
@@ -309,9 +291,6 @@ cp config.example.toml config.production.toml
 # 编辑配置
 vi config.production.toml
 ```
-
----
-
 ## 配置文件
 
 ### config.production.toml
@@ -427,9 +406,6 @@ JWT_SECRET=your_jwt_secret_key_change_this
 # 日志级别
 RUST_LOG=info
 ```
-
----
-
 ## 启动和停止
 
 ### 使用启动脚本（推荐）
@@ -509,9 +485,6 @@ sudo systemctl status solsniper-api
 # 查看日志
 sudo journalctl -u solsniper-api -f
 ```
-
----
-
 ## 监控和日志
 
 ### 日志配置
@@ -569,9 +542,6 @@ scrape_configs:
 - RPC 延迟
 - 缓存命中率
 - 活跃持仓数量
-
----
-
 ## 故障排查
 
 ### 常见问题
@@ -657,9 +627,6 @@ solana balance /path/to/wallet.json
 - 检查钱包 SOL 余额
 - 增加滑点容忍度
 - 提高优先费用
-
----
-
 ## 备份和恢复
 
 ### 数据库备份
@@ -711,9 +678,6 @@ tar -czf solsniper-config-$(date +%Y%m%d).tar.gz \
   .env \
   /secure/path/to/wallet.json
 ```
-
----
-
 ## 性能优化
 
 ### 数据库优化
@@ -770,8 +734,5 @@ fs.file-max = 2097152
 # 应用配置
 sudo sysctl -p
 ```
-
----
-
 **文档版本**: v2.0.0
 **最后更新**: 2025-12-21

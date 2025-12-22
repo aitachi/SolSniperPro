@@ -1,15 +1,9 @@
 # SolSniper Pro - 前端架构文档
----
----
-
-**Author**: Aitachi
-**Email**: 44158892@qq.com
-**Wechat**: 18116011230
 
 ---
 
-**Author**: Aitachi
-**Email**: 44158892@qq.com
+**Author**: Aitachi  
+**Email**: 44158892@qq.com  
 **Wechat**: 18116011230
 
 ---
@@ -17,9 +11,6 @@
 **版本**: v2.0.0
 **日期**: 2025-12-21
 **技术栈**: React 18 + TypeScript + Vite + TailwindCSS
-
----
-
 ## 目录结构
 
 ```
@@ -154,9 +145,6 @@ frontend/
 ├── tsconfig.json              # TypeScript 配置
 └── README.md                  # 说明文档
 ```
-
----
-
 ## 核心功能模块
 
 ### 1. 仪表板模块 (Dashboard)
@@ -364,9 +352,6 @@ export const RiskControl = () => {
 - 热力图（收益分布）
 - 交易时段分析
 - 风险调整后收益
-
----
-
 ## WebSocket 实时更新
 
 ### useWebSocket Hook
@@ -445,9 +430,6 @@ const TokenList = () => {
   }, [messages])
 }
 ```
-
----
-
 ## API 客户端
 
 ### Axios 配置
@@ -515,9 +497,6 @@ export const tokensApi = {
   },
 }
 ```
-
----
-
 ## 状态管理 (Zustand)
 
 ### 认证状态
@@ -555,9 +534,6 @@ export const useAuthStore = create<AuthState>()(
   )
 )
 ```
-
----
-
 ## 样式系统
 
 ### 全局样式
@@ -604,9 +580,6 @@ export const useAuthStore = create<AuthState>()(
   }
 }
 ```
-
----
-
 ## 部署说明
 
 ### 开发模式
@@ -659,8 +632,5 @@ server {
     }
 }
 ```
-
----
-
 **文档版本**: v2.0.0
 **最后更新**: 2025-12-21

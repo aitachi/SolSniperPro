@@ -1,6 +1,5 @@
 # SolSniper Pro - Quick Start Guide
 ---
----
 
 **Author**: Aitachi
 **Email**: 44158892@qq.com
@@ -15,14 +14,6 @@
 ---
 
 **Complete System Startup Guide**
-
----
-
-**Author**: Aitachi
-**Email**: 44158892@qq.com
-**Wechat**: 18116011230
-
----
 
 ## Prerequisites
 

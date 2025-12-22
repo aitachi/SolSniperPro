@@ -1,0 +1,21 @@
+[package]
+name = "solsniper-ml-model"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+solsniper-core = { path = "../core" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+
+# ML dependencies
+ndarray = { workspace = true }
+linfa = { workspace = true }
+linfa-trees = { workspace = true }
+polars = { workspace = true }
+
+# Feature extraction
+chrono = { workspace = true }

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolSniper Pro - Test Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #020617 0%, #0c4a6e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #0ea5e9, #0369a1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-center;
+            margin: 0 auto 20px;
+            font-size: 32px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 40px;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .status-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .status-card h3 {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+
+        .status-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .status-value.success {
+            color: #10b981;
+        }
+
+        .status-value.error {
+            color: #ef4444;
+        }
+
+        .status-value.warning {
+            color: #f59e0b;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #0ea5e9;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .button:hover {
+            background: #0284c7;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.4);
+        }
+
+        .button-secondary {
+            background: #334155;
+        }
+
+        .button-secondary:hover {
+            background: #475569;
+        }
+
+        .test-results {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .test-results h3 {
+            margin-bottom: 15px;
+            color: #0ea5e9;
+        }
+
+        .test-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .test-item:last-child {
+            border-bottom: none;
+        }
+
+        .test-status {
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .test-status.pass {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .test-status.fail {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #334155;
+            border-top-color: #0ea5e9;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">⚡</div>
+        <h1>SolSniper Pro</h1>
+        <p class="subtitle">System Test & Diagnostics</p>
+
+        <div class="status-grid">
+            <div class="status-card">
+                <h3>Frontend Server</h3>
+                <div class="status-value" id="frontend-status">
+                    <div class="loading"></div>
+                </div>
+            </div>
+            <div class="status-card">
+                <h3>API Server</h3>
+                <div class="status-value" id="api-status">
+                    <div class="loading"></div>
+                </div>
+            </div>
+            <div class="status-card">
+                <h3>React App</h3>
+                <div class="status-value success">Ready</div>
+            </div>
+        </div>
+
+        <div class="test-results">
+            <h3>Test Results</h3>
+            <div id="test-results-content">
+                <p style="color: #94a3b8; text-align: center;">Click "Run Tests" to start...</p>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button class="button" onclick="runTests()">Run Tests</button>
+            <a href="http://localhost:5176" class="button">Open Main App</a>
+            <a href="http://localhost:5176/login" class="button button-secondary">Open Login</a>
+        </div>
+    </div>
+
+    <script>
+        // Check Frontend Server
+        async function checkFrontend() {
+            try {
+                const response = await fetch('http://localhost:5176/');
+                if (response.ok) {
+                    document.getElementById('frontend-status').innerHTML = '<span class="success">Online</span>';
+                    return true;
+                } else {
+                    document.getElementById('frontend-status').innerHTML = '<span class="error">Error</span>';
+                    return false;
+                }
+            } catch (error) {
+                document.getElementById('frontend-status').innerHTML = '<span class="error">Offline</span>';
+                return false;
+            }
+        }
+
+        // Check API Server
+        async function checkAPI() {
+            try {
+                const response = await fetch('http://localhost:3000/api/v1/health');
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('api-status').innerHTML = '<span class="success">Online</span>';
+                    return true;
+                } else {
+                    document.getElementById('api-status').innerHTML = '<span class="error">Error</span>';
+                    return false;
+                }
+            } catch (error) {
+                document.getElementById('api-status').innerHTML = '<span class="error">Offline</span>';
+                return false;
+            }
+        }
+
+        // Run all tests
+        async function runTests() {
+            const resultsDiv = document.getElementById('test-results-content');
+            resultsDiv.innerHTML = '<p style="color: #94a3b8;">Running tests...</p>';
+
+            const tests = [];
+
+            // Test 1: Frontend Server
+            const frontendOk = await checkFrontend();
+            tests.push({
+                name: 'Frontend Server (port 5176)',
+                status: frontendOk ? 'pass' : 'fail'
+            });
+
+            // Test 2: API Server
+            const apiOk = await checkAPI();
+            tests.push({
+                name: 'API Server (port 3000)',
+                status: apiOk ? 'pass' : 'fail'
+            });
+
+            // Test 3: Health Endpoint
+            if (apiOk) {
+                tests.push({
+                    name: 'API Health Endpoint',
+                    status: 'pass'
+                });
+            } else {
+                tests.push({
+                    name: 'API Health Endpoint',
+                    status: 'fail'
+                });
+            }
+
+            // Test 4: Login API
+            if (apiOk) {
+                try {
+                    const response = await fetch('http://localhost:3000/api/v1/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            username: 'admin',
+                            password: 'admin123'
+                        })
+                    });
+                    const data = await response.json();
+                    tests.push({
+                        name: 'Login API (admin/admin123)',
+                        status: data.success ? 'pass' : 'fail'
+                    });
+                } catch (error) {
+                    tests.push({
+                        name: 'Login API (admin/admin123)',
+                        status: 'fail'
+                    });
+                }
+            }
+
+            // Test 5: Tokens API
+            if (apiOk) {
+                try {
+                    const response = await fetch('http://localhost:3000/api/v1/tokens');
+                    const data = await response.json();
+                    tests.push({
+                        name: 'Tokens API',
+                        status: data.success ? 'pass' : 'fail'
+                    });
+                } catch (error) {
+                    tests.push({
+                        name: 'Tokens API',
+                        status: 'fail'
+                    });
+                }
+            }
+
+            // Test 6: Strategies API
+            if (apiOk) {
+                try {
+                    const response = await fetch('http://localhost:3000/api/v1/strategies');
+                    const data = await response.json();
+                    tests.push({
+                        name: 'Strategies API',
+                        status: data.success ? 'pass' : 'fail'
+                    });
+                } catch (error) {
+                    tests.push({
+                        name: 'Strategies API',
+                        status: 'fail'
+                    });
+                }
+            }
+
+            // Display results
+            let html = '';
+            let passCount = 0;
+            tests.forEach(test => {
+                if (test.status === 'pass') passCount++;
+                html += `
+                    <div class="test-item">
+                        <span>${test.name}</span>
+                        <span class="test-status ${test.status}">${test.status.toUpperCase()}</span>
+                    </div>
+                `;
+            });
+
+            html = `<p style="margin-bottom: 15px; color: ${passCount === tests.length ? '#10b981' : '#f59e0b'};">
+                ${passCount}/${tests.length} tests passed
+            </p>` + html;
+
+            resultsDiv.innerHTML = html;
+        }
+
+        // Auto-run on page load
+        window.addEventListener('load', () => {
+            checkFrontend();
+            checkAPI();
+        });
+    </script>
+</body>
+</html>

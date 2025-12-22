@@ -1,0 +1,46 @@
+# 系统配置文件
+
+[rpc]
+endpoints = [
+    "https://api.mainnet-beta.solana.com",
+    "https://solana-api.projectserum.com",
+]
+timeout_seconds = 30
+max_retries = 3
+
+[database]
+postgres_url = "postgresql://user:password@localhost:5432/solsniper"
+scylla_nodes = ["localhost:9042"]
+max_connections = 20
+
+[kafka]
+brokers = ["localhost:9092"]
+group_id = "solsniper-consumer-group"
+
+[kafka.topics]
+raw_events = "raw-events"
+pool_created = "pool-created"
+token_analyzed = "token-analyzed"
+snipe_signals = "snipe-signals"
+trade_executions = "trade-executions"
+risk_alerts = "risk-alerts"
+
+[redis]
+url = "redis://localhost:6379"
+pool_size = 10
+
+[ml]
+model_path = "./models"
+enable_online_learning = true
+update_interval_hours = 24
+
+[smart_money]
+min_trades = 50
+min_win_rate = 0.6
+min_total_profit = 100.0
+lookback_days = 30
+
+[risk]
+min_risk_score = 70.0
+max_top10_ratio = 0.6
+min_liquidity_sol = 10.0

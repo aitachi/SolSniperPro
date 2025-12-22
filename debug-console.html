@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolSniper Pro - 调试控制台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #020617;
+            color: #e2e8f0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #0ea5e9;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .section {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            color: #38bdf8;
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+        }
+
+        .status-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: #0f172a;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-ok {
+            color: #10b981;
+        }
+
+        .status-error {
+            color: #ef4444;
+        }
+
+        .status-warning {
+            color: #f59e0b;
+        }
+
+        .btn {
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: #0284c7;
+        }
+
+        .btn-secondary {
+            background: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .console-output {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 4px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #475569;
+            padding-left: 10px;
+        }
+
+        .log-error {
+            border-left-color: #ef4444;
+            color: #fca5a5;
+        }
+
+        .log-success {
+            border-left-color: #10b981;
+            color: #86efac;
+        }
+
+        .log-info {
+            border-left-color: #0ea5e9;
+            color: #7dd3fc;
+        }
+
+        .links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .link-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 15px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .link-card h3 {
+            color: #0ea5e9;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .link-card a {
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .link-card a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 SolSniper Pro - 诊断控制台</h1>
+
+        <!-- 快速访问链接 -->
+        <div class="section">
+            <h2>📌 快速访问</h2>
+            <div class="links">
+                <div class="link-card">
+                    <h3>主应用</h3>
+                    <a href="http://localhost:5176" target="_blank">http://localhost:5176</a>
+                </div>
+                <div class="link-card">
+                    <h3>登录页面</h3>
+                    <a href="http://localhost:5176/login" target="_blank">http://localhost:5176/login</a>
+                </div>
+                <div class="link-card">
+                    <h3>API健康检查</h3>
+                    <a href="http://localhost:3000/api/v1/health" target="_blank">http://localhost:3000/api/v1/health</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 服务状态 -->
+        <div class="section">
+            <h2>🖥️ 服务状态</h2>
+            <div id="service-status">
+                <div class="status-item">
+                    <span>前端服务器 (5176)</span>
+                    <span id="frontend-status">检查中...</span>
+                </div>
+                <div class="status-item">
+                    <span>API服务器 (3000)</span>
+                    <span id="api-status">检查中...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- API测试 -->
+        <div class="section">
+            <h2>🧪 API测试</h2>
+            <div style="margin-bottom: 15px;">
+                <button class="btn" onclick="testHealth()">测试健康检查</button>
+                <button class="btn" onclick="testLogin()">测试登录</button>
+                <button class="btn" onclick="testTokens()">测试代币API</button>
+                <button class="btn" onclick="testStrategies()">测试策略API</button>
+                <button class="btn-secondary btn" onclick="clearLog()">清空日志</button>
+            </div>
+            <div class="console-output" id="console-output">
+                <div class="log-entry log-info">等待测试...</div>
+            </div>
+        </div>
+
+        <!-- 操作说明 -->
+        <div class="section">
+            <h2>📖 操作指南</h2>
+            <div style="line-height: 1.8; color: #94a3b8;">
+                <p><strong>1. 如果主应用显示空白页：</strong></p>
+                <p style="margin-left: 20px;">• 按 F12 打开浏览器开发者工具</p>
+                <p style="margin-left: 20px;">• 查看 Console 标签页的错误信息</p>
+                <p style="margin-left: 20px;">• 查看 Network 标签页，确认资源加载状态</p>
+
+                <p style="margin-top: 15px;"><strong>2. 访问应用功能：</strong></p>
+                <p style="margin-left: 20px;">• 访问 <a href="http://localhost:5176/login" style="color: #0ea5e9;">http://localhost:5176/login</a></p>
+                <p style="margin-left: 20px;">• 使用 admin / admin123 登录</p>
+                <p style="margin-left: 20px;">• 登录后会看到完整的管理界面</p>
+
+                <p style="margin-top: 15px;"><strong>3. 主要功能模块：</strong></p>
+                <p style="margin-left: 20px;">• 仪表板 - 总体数据概览</p>
+                <p style="margin-left: 20px;">• 代币监控 - 实时代币发现和筛选</p>
+                <p style="margin-left: 20px;">• 策略管理 - 交易策略配置和启停</p>
+                <p style="margin-left: 20px;">• 交易管理 - 查看交易历史</p>
+                <p style="margin-left: 20px;">• 持仓管理 - 管理活跃持仓</p>
+                <p style="margin-left: 20px;">• 风险控制 - 配置风险参数</p>
+                <p style="margin-left: 20px;">• 数据分析 - 性能分析和图表</p>
+            </div>
+        </div>
+
+        <!-- 登录信息 -->
+        <div class="section">
+            <h2>🔑 默认登录信息</h2>
+            <div class="status-item">
+                <span>用户名</span>
+                <span class="status-ok">admin</span>
+            </div>
+            <div class="status-item">
+                <span>密码</span>
+                <span class="status-ok">admin123</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 日志输出
+        function log(message, type = 'info') {
+            const output = document.getElementById('console-output');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            output.appendChild(entry);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('console-output').innerHTML = '';
+            log('日志已清空', 'info');
+        }
+
+        // 检查服务状态
+        async function checkServices() {
+            // 检查前端
+            try {
+                const res = await fetch('http://localhost:5176/');
+                if (res.ok) {
+                    document.getElementById('frontend-status').innerHTML = '<span class="status-ok">✓ 运行中</span>';
+                } else {
+                    document.getElementById('frontend-status').innerHTML = '<span class="status-error">✗ 错误</span>';
+                }
+            } catch (e) {
+                document.getElementById('frontend-status').innerHTML = '<span class="status-error">✗ 离线</span>';
+            }
+
+            // 检查API
+            try {
+                const res = await fetch('http://localhost:3000/api/v1/health');
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('api-status').innerHTML = '<span class="status-ok">✓ 运行中</span>';
+                } else {
+                    document.getElementById('api-status').innerHTML = '<span class="status-error">✗ 错误</span>';
+                }
+            } catch (e) {
+                document.getElementById('api-status').innerHTML = '<span class="status-error">✗ 离线</span>';
+            }
+        }
+
+        // 测试健康检查
+        async function testHealth() {
+            log('测试健康检查API...', 'info');
+            try {
+                const res = await fetch('http://localhost:3000/api/v1/health');
+                const data = await res.json();
+                log(`健康检查成功: ${JSON.stringify(data)}`, 'success');
+            } catch (e) {
+                log(`健康检查失败: ${e.message}`, 'error');
+            }
+        }
+
+        // 测试登录
+        async function testLogin() {
+            log('测试登录API (admin/admin123)...', 'info');
+            try {
+                const res = await fetch('http://localhost:3000/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: 'admin', password: 'admin123' })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    log(`登录成功! Token: ${data.data.token}`, 'success');
+                    log(`用户信息: ${JSON.stringify(data.data.user)}`, 'success');
+                } else {
+                    log(`登录失败: ${JSON.stringify(data)}`, 'error');
+                }
+            } catch (e) {
+                log(`登录请求失败: ${e.message}`, 'error');
+            }
+        }
+
+        // 测试代币API
+        async function testTokens() {
+            log('测试代币API...', 'info');
+            try {
+                const res = await fetch('http://localhost:3000/api/v1/tokens');
+                const data = await res.json();
+                if (data.success) {
+                    log(`获取到 ${data.data.length} 个代币`, 'success');
+                    data.data.forEach((token, i) => {
+                        log(`代币${i+1}: ${token.symbol} - ${token.name}`, 'info');
+                    });
+                } else {
+                    log(`获取代币失败: ${JSON.stringify(data)}`, 'error');
+                }
+            } catch (e) {
+                log(`代币API请求失败: ${e.message}`, 'error');
+            }
+        }
+
+        // 测试策略API
+        async function testStrategies() {
+            log('测试策略API...', 'info');
+            try {
+                const res = await fetch('http://localhost:3000/api/v1/strategies');
+                const data = await res.json();
+                if (data.success) {
+                    log(`获取到 ${data.data.length} 个策略`, 'success');
+                    data.data.forEach((strategy, i) => {
+                        log(`策略${i+1}: ${strategy.name} (${strategy.type}) - 优先级: ${strategy.priority}`, 'info');
+                    });
+                } else {
+                    log(`获取策略失败: ${JSON.stringify(data)}`, 'error');
+                }
+            } catch (e) {
+                log(`策略API请求失败: ${e.message}`, 'error');
+            }
+        }
+
+        // 页面加载时检查服务
+        window.addEventListener('load', () => {
+            checkServices();
+            log('诊断控制台已加载', 'success');
+            log('点击上方按钮测试各项功能', 'info');
+        });
+
+        // 每10秒自动检查服务状态
+        setInterval(checkServices, 10000);
+    </script>
+</body>
+</html>

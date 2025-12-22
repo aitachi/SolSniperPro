@@ -1,0 +1,13 @@
+[package]
+name = "solsniper-strategy-engine"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+solsniper-core = { path = "../core" }
+solsniper-risk-analyzer = { path = "../risk-analyzer" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }

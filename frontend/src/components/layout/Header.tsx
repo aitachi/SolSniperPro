@@ -9,7 +9,6 @@ import {
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSystemHealth } from '@/hooks/useMetrics'
-import { Badge } from '@/components/common/Badge'
 import { cn } from '@/utils/helpers'
 
 export const Header: React.FC = () => {
@@ -47,7 +46,7 @@ export const Header: React.FC = () => {
         {/* System Status */}
         {health && (
           <div className="flex items-center gap-2 ml-4 px-3 py-1.5 bg-dark-700 rounded-lg">
-            <div className={cn('status-dot', getStatusColor(health.status))} />
+            <div className={cn('status-dot', getStatusColor(String(health.status || '')))} />
             <span className="text-xs font-medium text-gray-300">
               {health.status}
             </span>

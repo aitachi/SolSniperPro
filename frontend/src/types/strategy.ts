@@ -1,8 +1,11 @@
 // Strategy Types
+import type { Trade } from './trade'
+
 export interface Strategy {
   id: string
   name: string
   enabled: boolean
+  is_active: boolean // Alias for enabled
   priority: number
   config: StrategyConfig
   stats: StrategyStats

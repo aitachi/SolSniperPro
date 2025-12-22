@@ -3,7 +3,7 @@ import { usePerformance } from '@/hooks/useMetrics'
 import { Card, CardHeader } from '@/components/common/Card'
 import { Select } from '@/components/common/Input'
 import { Loading } from '@/components/common/Loading'
-import { formatUSD, formatPercentage } from '@/utils/format'
+import { formatUSD } from '@/utils/format'
 
 export const Analytics: React.FC = () => {
   const [period, setPeriod] = useState<'1h' | '24h' | '7d' | '30d' | 'all'>('24h')
@@ -39,24 +39,24 @@ export const Analytics: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <Card>
               <p className="metric-label">Total PnL</p>
-              <p className={`metric-value ${data?.summary.total_pnl >= 0 ? 'text-success-500' : 'text-danger-500'}`}>
-                {formatUSD(data?.summary.total_pnl || 0)}
+              <p className={`metric-value ${(data?.summary?.total_pnl ?? 0) >= 0 ? 'text-success-500' : 'text-danger-500'}`}>
+                {formatUSD(data?.summary?.total_pnl ?? 0)}
               </p>
             </Card>
             <Card>
               <p className="metric-label">Total Trades</p>
-              <p className="metric-value">{data?.summary.total_trades || 0}</p>
+              <p className="metric-value">{data?.summary?.total_trades ?? 0}</p>
             </Card>
             <Card>
               <p className="metric-label">Best Day</p>
               <p className="metric-value text-success-500">
-                {formatUSD(data?.summary.best_day || 0)}
+                {formatUSD(data?.summary?.best_day ?? 0)}
               </p>
             </Card>
             <Card>
               <p className="metric-label">Worst Day</p>
               <p className="metric-value text-danger-500">
-                {formatUSD(data?.summary.worst_day || 0)}
+                {formatUSD(data?.summary?.worst_day ?? 0)}
               </p>
             </Card>
           </div>

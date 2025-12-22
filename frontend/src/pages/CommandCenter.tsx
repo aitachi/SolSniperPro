@@ -8,20 +8,16 @@ import { Badge } from '@/components/common/Badge'
 import { Button } from '@/components/common/Button'
 import {
   Activity,
-  Zap,
-  Shield,
   TrendingUp,
   TrendingDown,
   Play,
   Pause,
-  AlertTriangle,
   CheckCircle,
   XCircle,
   RefreshCw,
   DollarSign,
   Wallet,
   Target,
-  BarChart3,
   Clock,
   Cpu,
   Database,
@@ -251,7 +247,7 @@ export const CommandCenter: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <p className="font-semibold">{formatUSD(trade.amount_usd)}</p>
-                      <Badge variant={trade.status === 'COMPLETED' ? 'success' : 'gray'} size="sm">
+                      <Badge variant={trade.status === 'COMPLETED' ? 'success' : 'gray'}>
                         {trade.status}
                       </Badge>
                     </div>
@@ -305,7 +301,7 @@ export const CommandCenter: React.FC = () => {
                       )}
                       <p className="font-semibold text-sm">{strategy.name}</p>
                     </div>
-                    <Badge variant={strategy.is_active ? 'success' : 'gray'} size="sm">
+                    <Badge variant={strategy.is_active ? 'success' : 'gray'}>
                       {strategy.is_active ? 'ACTIVE' : 'PAUSED'}
                     </Badge>
                   </div>

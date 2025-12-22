@@ -2,7 +2,6 @@ import { BrowserRouter } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { AppRouter } from './router'
-import { useAuthStore } from './stores/authStore'
 import { useEffect } from 'react'
 
 const queryClient = new QueryClient({
@@ -16,8 +15,6 @@ const queryClient = new QueryClient({
 })
 
 function App() {
-  const { token } = useAuthStore()
-
   useEffect(() => {
     // Initialize theme
     document.documentElement.classList.add('dark')

@@ -100,7 +100,7 @@ export const useWebSocket = ({
   }, [token, topics, onMessage, autoReconnect, reconnectInterval])
 
   const handleEvent = (message: WebSocketMessage) => {
-    const { event, data, topic } = message
+    const { event, data } = message
 
     switch (event as WebSocketEvent) {
       case 'new_token':
@@ -142,7 +142,7 @@ export const useWebSocket = ({
         break
 
       case 'strategy_triggered':
-        toast.info(`Strategy triggered: ${data.strategy_name} for ${data.token_symbol}`)
+        toast(`Strategy triggered: ${data.strategy_name} for ${data.token_symbol}`, { icon: 'ℹ️' })
         break
 
       case 'strategy_updated':

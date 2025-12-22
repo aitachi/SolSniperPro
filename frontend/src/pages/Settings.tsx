@@ -6,12 +6,9 @@ import { Badge } from '@/components/common/Badge'
 import { useUIStore } from '@/stores/uiStore'
 import { useAuth } from '@/hooks/useAuth'
 import {
-  User,
   Bell,
   Volume2,
   RefreshCw,
-  DollarSign,
-  Globe,
 } from 'lucide-react'
 
 export const Settings: React.FC = () => {

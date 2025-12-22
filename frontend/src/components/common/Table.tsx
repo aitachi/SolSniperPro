@@ -1,4 +1,3 @@
-import React from 'react'
 import { cn } from '@/utils/helpers'
 import type { TableColumn } from '@/types/api'
 
@@ -68,7 +67,7 @@ export function Table<T extends Record<string, any>>({
 
                 return (
                   <td key={String(column.key)} className="table-cell">
-                    {column.render ? column.render(value, row) : value}
+                    {column.render ? column.render(value, row) : String(value ?? '')}
                   </td>
                 )
               })}

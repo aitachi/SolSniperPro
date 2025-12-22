@@ -110,7 +110,7 @@ const mockStrategies = [
     id: 'strategy1',
     name: 'Early Bird',
     type: 'EarlyBird',
-    isActive: true,
+    is_active: true,
     priority: 90,
     stats: {
       totalTrades: 156,
@@ -123,7 +123,7 @@ const mockStrategies = [
     id: 'strategy2',
     name: 'Liquidity Hunter',
     type: 'LiquidityHunter',
-    isActive: true,
+    is_active: true,
     priority: 80,
     stats: {
       totalTrades: 89,

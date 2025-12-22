@@ -50,8 +50,8 @@ export const Dashboard: React.FC = () => {
                 {formatSOL(tradingMetrics?.total_pnl_sol || 0)}
               </p>
             </div>
-            <div className={`p-3 rounded-lg ${tradingMetrics?.total_pnl_usd > 0 ? 'bg-success-500/20' : 'bg-danger-500/20'}`}>
-              <DollarSign size={24} className={tradingMetrics?.total_pnl_usd > 0 ? 'text-success-500' : 'text-danger-500'} />
+            <div className={`p-3 rounded-lg ${(tradingMetrics?.total_pnl_usd ?? 0) > 0 ? 'bg-success-500/20' : 'bg-danger-500/20'}`}>
+              <DollarSign size={24} className={(tradingMetrics?.total_pnl_usd ?? 0) > 0 ? 'text-success-500' : 'text-danger-500'} />
             </div>
           </div>
         </Card>

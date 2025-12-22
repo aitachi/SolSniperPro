@@ -73,7 +73,7 @@ export const Trading: React.FC = () => {
     {
       key: 'pnl_usd',
       label: 'PnL',
-      render: (value, trade) => {
+      render: (value) => {
         if (value === undefined || value === null) return '-'
         return (
           <span className={value >= 0 ? 'text-success-500' : 'text-danger-500'}>

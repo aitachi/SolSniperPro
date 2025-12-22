@@ -4,11 +4,8 @@ import { Header } from './Header'
 import { Sidebar } from './Sidebar'
 import { Footer } from './Footer'
 import { useWebSocket } from '@/hooks/useWebSocket'
-import { useUIStore } from '@/stores/uiStore'
 
 export const Layout: React.FC = () => {
-  const { notificationsEnabled } = useUIStore()
-
   // Connect to WebSocket for real-time updates
   const { isConnected } = useWebSocket({
     topics: ['tokens', 'trades', 'positions', 'strategies', 'risk', 'metrics'],

@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, CardHeader } from '@/components/common/Card'
 import { Input } from '@/components/common/Input'
 import { Button } from '@/components/common/Button'
-import { Shield, AlertTriangle } from 'lucide-react'
+import { Shield } from 'lucide-react'
 
 export const RiskControl: React.FC = () => {
   return (

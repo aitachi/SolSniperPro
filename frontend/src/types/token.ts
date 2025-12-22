@@ -1,4 +1,6 @@
 // Token Information Types
+import type { Trade } from './trade'
+
 export interface TokenInfo {
   mint: string
   symbol: string

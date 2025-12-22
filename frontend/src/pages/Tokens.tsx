@@ -3,12 +3,10 @@ import { useTokens } from '@/hooks/useTokens'
 import { Card, CardHeader } from '@/components/common/Card'
 import { Table } from '@/components/common/Table'
 import { Badge } from '@/components/common/Badge'
-import { Input, Select } from '@/components/common/Input'
-import { Loading } from '@/components/common/Loading'
+import { Input } from '@/components/common/Input'
 import type { TableColumn } from '@/types/api'
 import type { TokenInfo } from '@/types/token'
-import { formatUSD, formatCompact, formatPercentage, formatRelativeTime } from '@/utils/format'
-import { Search, Filter } from 'lucide-react'
+import { formatUSD, formatCompact, formatPercentage } from '@/utils/format'
 
 export const Tokens: React.FC = () => {
   const [filters, setFilters] = useState({

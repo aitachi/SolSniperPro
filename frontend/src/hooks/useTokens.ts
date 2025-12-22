@@ -60,7 +60,7 @@ export const useRefreshToken = () => {
   return useMutation(
     (mint: string) => tokensApi.refreshToken(mint),
     {
-      onSuccess: (data, mint) => {
+      onSuccess: (_, mint) => {
         queryClient.invalidateQueries(['token', mint])
         queryClient.invalidateQueries(['tokens'])
       },

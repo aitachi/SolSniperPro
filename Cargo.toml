@@ -9,6 +9,7 @@ members = [
     "crates/smart-money-tracker",
     "crates/behavior-pattern",
     "crates/advanced-strategies",
+    "crates/api-server",
 ]
 resolver = "2"
 

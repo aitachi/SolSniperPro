@@ -1,9 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { useQuery } from 'react-query'
 import { tradesApi } from '@/api/trades'
 import { useTradeStore } from '@/stores/tradeStore'
-import type { TradeFilters, TradeFormData } from '@/types/trade'
-import toast from 'react-hot-toast'
+import type { TradeFilters } from '@/types/trade'
 
+/**
+ * Get trades history with filters
+ */
 export const useTrades = (filters?: TradeFilters) => {
   const { setTrades, setLoading, setError } = useTradeStore()
 
@@ -33,6 +35,9 @@ export const useTrades = (filters?: TradeFilters) => {
   )
 }
 
+/**
+ * Get single trade by ID
+ */
 export const useTrade = (id: string) => {
   return useQuery(
     ['trade', id],
@@ -44,52 +49,10 @@ export const useTrade = (id: string) => {
   )
 }
 
-export const useSimulateTrade = () => {
-  return useMutation(
-    (data: TradeFormData) => tradesApi.simulateTrade(data),
-    {
-      onError: (error: any) => {
-        toast.error(error.message || 'Simulation failed')
-      },
-    }
-  )
-}
-
-export const useExecuteTrade = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation(
-    (data: TradeFormData) => tradesApi.executeTrade(data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['trades'])
-        queryClient.invalidateQueries(['positions'])
-        toast.success('Trade executed successfully')
-      },
-      onError: (error: any) => {
-        toast.error(error.message || 'Trade execution failed')
-      },
-    }
-  )
-}
-
-export const useCancelTrade = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation(
-    (id: string) => tradesApi.cancelTrade(id),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['trades'])
-        toast.success('Trade cancelled')
-      },
-      onError: (error: any) => {
-        toast.error(error.message || 'Failed to cancel trade')
-      },
-    }
-  )
-}
-
+/**
+ * Get trade statistics
+ * Uses fallback to /metrics/summary
+ */
 export const useTradeStats = (params?: {
   start_date?: string
   end_date?: string
@@ -103,3 +66,65 @@ export const useTradeStats = (params?: {
     }
   )
 }
+
+// ==================== DISABLED HOOKS ====================
+// The following hooks are commented out because backend endpoints
+// are not implemented yet. Uncomment when backend is ready.
+
+// /**
+//  * Simulate trade before execution
+//  * DISABLED: Backend endpoint not implemented
+//  */
+// export const useSimulateTrade = () => {
+//   return useMutation(
+//     (data: TradeFormData) => tradesApi.simulateTrade(data),
+//     {
+//       onError: (error: any) => {
+//         toast.error(error.message || 'Simulation failed')
+//       },
+//     }
+//   )
+// }
+
+// /**
+//  * Execute manual trade
+//  * DISABLED: Backend endpoint not implemented
+//  */
+// export const useExecuteTrade = () => {
+//   const queryClient = useQueryClient()
+//
+//   return useMutation(
+//     (data: TradeFormData) => tradesApi.executeTrade(data),
+//     {
+//       onSuccess: () => {
+//         queryClient.invalidateQueries(['trades'])
+//         queryClient.invalidateQueries(['positions'])
+//         toast.success('Trade executed successfully')
+//       },
+//       onError: (error: any) => {
+//         toast.error(error.message || 'Trade execution failed')
+//       },
+//     }
+//   )
+// }
+
+// /**
+//  * Cancel pending trade
+//  * DISABLED: Backend endpoint not implemented
+//  */
+// export const useCancelTrade = () => {
+//   const queryClient = useQueryClient()
+//
+//   return useMutation(
+//     (id: string) => tradesApi.cancelTrade(id),
+//     {
+//       onSuccess: () => {
+//         queryClient.invalidateQueries(['trades'])
+//         toast.success('Trade cancelled')
+//       },
+//       onError: (error: any) => {
+//         toast.error(error.message || 'Failed to cancel trade')
+//       },
+//     }
+//   )
+// }

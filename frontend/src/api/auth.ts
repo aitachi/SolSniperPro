@@ -16,17 +16,18 @@ export const authApi = {
     return client.post('/auth/logout')
   },
 
-  /**
-   * Refresh access token
-   */
-  refresh: async (): Promise<LoginResponse> => {
-    return client.post('/auth/refresh')
-  },
+  // Note: refresh and verify endpoints not implemented in backend yet
+  // /**
+  //  * Refresh access token
+  //  */
+  // refresh: async (): Promise<LoginResponse> => {
+  //   return client.post('/auth/refresh')
+  // },
 
-  /**
-   * Verify token validity
-   */
-  verify: async (): Promise<{ valid: boolean }> => {
-    return client.get('/auth/verify')
-  },
+  // /**
+  //  * Verify token validity
+  //  */
+  // verify: async (): Promise<{ valid: boolean }> => {
+  //   return client.get('/auth/verify')
+  // },
 }

@@ -3,6 +3,9 @@ import { tradesApi } from '@/api/trades'
 import { useTradeStore } from '@/stores/tradeStore'
 import toast from 'react-hot-toast'
 
+/**
+ * Get all active positions
+ */
 export const usePositions = () => {
   const { setPositions, setLoading, setError } = useTradeStore()
 
@@ -32,6 +35,9 @@ export const usePositions = () => {
   )
 }
 
+/**
+ * Get single position by ID
+ */
 export const usePosition = (id: string) => {
   return useQuery(
     ['position', id],
@@ -43,6 +49,9 @@ export const usePosition = (id: string) => {
   )
 }
 
+/**
+ * Close position (sell tokens)
+ */
 export const useClosePosition = () => {
   const queryClient = useQueryClient()
 
@@ -67,13 +76,21 @@ export const useClosePosition = () => {
   )
 }
 
-export const usePositionHistory = (tokenMint: string) => {
-  return useQuery(
-    ['position-history', tokenMint],
-    () => tradesApi.getPositionHistory(tokenMint),
-    {
-      enabled: !!tokenMint,
-      staleTime: 30000,
-    }
-  )
-}
+// ==================== DISABLED HOOKS ====================
+// The following hooks are commented out because backend endpoints
+// are not implemented yet. Uncomment when backend is ready.
+
+// /**
+//  * Get position history for a token
+//  * DISABLED: Backend endpoint not implemented
+//  */
+// export const usePositionHistory = (tokenMint: string) => {
+//   return useQuery(
+//     ['position-history', tokenMint],
+//     () => tradesApi.getPositionHistory(tokenMint),
+//     {
+//       enabled: !!tokenMint,
+//       staleTime: 30000,
+//     }
+//   )
+// }

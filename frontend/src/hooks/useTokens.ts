@@ -1,8 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { useQuery } from 'react-query'
 import { tokensApi } from '@/api/tokens'
 import { useTokenStore } from '@/stores/tokenStore'
 import type { TokenFilters } from '@/types/token'
 
+/**
+ * Get tokens list with filters
+ */
 export const useTokens = (filters?: TokenFilters) => {
   const { setTokens, setLoading, setError } = useTokenStore()
 
@@ -32,6 +35,9 @@ export const useTokens = (filters?: TokenFilters) => {
   )
 }
 
+/**
+ * Get single token by mint address
+ */
 export const useToken = (mint: string) => {
   return useQuery(
     ['token', mint],
@@ -43,6 +49,10 @@ export const useToken = (mint: string) => {
   )
 }
 
+/**
+ * Get token risk score
+ * Uses fallback implementation (extracts from token detail)
+ */
 export const useTokenRiskScore = (mint: string) => {
   return useQuery(
     ['token-risk', mint],
@@ -54,30 +64,46 @@ export const useTokenRiskScore = (mint: string) => {
   )
 }
 
-export const useRefreshToken = () => {
-  const queryClient = useQueryClient()
+// ==================== DISABLED HOOKS ====================
+// The following hooks are commented out because backend endpoints
+// are not implemented yet. Uncomment when backend is ready.
 
-  return useMutation(
-    (mint: string) => tokensApi.refreshToken(mint),
-    {
-      onSuccess: (_, mint) => {
-        queryClient.invalidateQueries(['token', mint])
-        queryClient.invalidateQueries(['tokens'])
-      },
-    }
-  )
-}
+// /**
+//  * Refresh token data from blockchain
+//  * DISABLED: Backend endpoint not implemented
+//  */
+// export const useRefreshToken = () => {
+//   const queryClient = useQueryClient()
+//
+//   return useMutation(
+//     (mint: string) => tokensApi.refreshToken(mint),
+//     {
+//       onSuccess: (_, mint) => {
+//         queryClient.invalidateQueries(['token', mint])
+//         queryClient.invalidateQueries(['tokens'])
+//       },
+//     }
+//   )
+// }
 
-export const useSearchTokens = () => {
-  return useMutation((query: string) => tokensApi.searchTokens(query))
-}
+// /**
+//  * Search tokens by symbol or name
+//  * DISABLED: Backend endpoint not implemented
+//  */
+// export const useSearchTokens = () => {
+//   return useMutation((query: string) => tokensApi.searchTokens(query))
+// }
 
-export const useTrendingTokens = (limit?: number) => {
-  return useQuery(
-    ['trending-tokens', limit],
-    () => tokensApi.getTrending(limit),
-    {
-      staleTime: 30000, // 30 seconds
-    }
-  )
-}
+// /**
+//  * Get trending tokens
+//  * DISABLED: Backend endpoint not implemented
+//  */
+// export const useTrendingTokens = (limit?: number) => {
+//   return useQuery(
+//     ['trending-tokens', limit],
+//     () => tokensApi.getTrending(limit),
+//     {
+//       staleTime: 30000, // 30 seconds
+//     }
+//   )
+// }

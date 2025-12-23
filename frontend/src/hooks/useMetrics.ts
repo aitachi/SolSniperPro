@@ -12,24 +12,26 @@ export const useMetricsSummary = () => {
   )
 }
 
-export const useTradingMetrics = (params?: {
-  start_date?: string
-  end_date?: string
-}) => {
-  return useQuery(
-    ['trading-metrics', params],
-    () => metricsApi.getTradingMetrics(params),
-    {
-      staleTime: 10000,
-    }
-  )
-}
+// Note: getTradingMetrics not implemented in backend yet
+// export const useTradingMetrics = (params?: {
+//   start_date?: string
+//   end_date?: string
+// }) => {
+//   return useQuery(
+//     ['trading-metrics', params],
+//     () => metricsApi.getTradingMetrics(params),
+//     {
+//       staleTime: 10000,
+//     }
+//   )
+// }
 
-export const useStrategyMetrics = (strategyName?: string) => {
+export const useStrategyMetrics = (strategyId?: string) => {
   return useQuery(
-    ['strategy-metrics', strategyName],
-    () => metricsApi.getStrategyMetrics(strategyName),
+    ['strategy-metrics', strategyId],
+    () => strategyId ? metricsApi.getStrategyMetrics(strategyId) : Promise.resolve(null),
     {
+      enabled: !!strategyId,
       refetchInterval: 10000,
       staleTime: 5000,
     }
@@ -47,48 +49,51 @@ export const useSystemHealth = () => {
   )
 }
 
-export const useRpcMetrics = () => {
-  return useQuery(
-    ['rpc-metrics'],
-    () => metricsApi.getRpcMetrics(),
-    {
-      refetchInterval: 10000,
-      staleTime: 5000,
-    }
-  )
-}
+// Note: The following hooks are disabled because endpoints are not implemented yet
+// Uncomment when backend implements these features
 
-export const usePerformance = (period: '1h' | '24h' | '7d' | '30d' | 'all') => {
-  return useQuery(
-    ['performance', period],
-    () => metricsApi.getPerformance(period),
-    {
-      staleTime: 30000,
-    }
-  )
-}
+// export const useRpcMetrics = () => {
+//   return useQuery(
+//     ['rpc-metrics'],
+//     () => metricsApi.getRpcMetrics(),
+//     {
+//       refetchInterval: 10000,
+//       staleTime: 5000,
+//     }
+//   )
+// }
 
-export const useHeatMap = (params?: {
-  start_date?: string
-  end_date?: string
-}) => {
-  return useQuery(
-    ['heatmap', params],
-    () => metricsApi.getHeatMap(params),
-    {
-      staleTime: 60000, // 1 minute
-    }
-  )
-}
+// export const usePerformance = (period: '1h' | '24h' | '7d' | '30d' | 'all') => {
+//   return useQuery(
+//     ['performance', period],
+//     () => metricsApi.getPerformance(period),
+//     {
+//       staleTime: 30000,
+//     }
+//   )
+// }
 
-export const useStrategyComparison = (
-  period: '24h' | '7d' | '30d' | 'all'
-) => {
-  return useQuery(
-    ['strategy-comparison', period],
-    () => metricsApi.getStrategyComparison(period),
-    {
-      staleTime: 30000,
-    }
-  )
-}
+// export const useHeatMap = (params?: {
+//   start_date?: string
+//   end_date?: string
+// }) => {
+//   return useQuery(
+//     ['heatmap', params],
+//     () => metricsApi.getHeatMap(params),
+//     {
+//       staleTime: 60000, // 1 minute
+//     }
+//   )
+// }
+
+// export const useStrategyComparison = (
+//   period: '24h' | '7d' | '30d' | 'all'
+// ) => {
+//   return useQuery(
+//     ['strategy-comparison', period],
+//     () => metricsApi.getStrategyComparison(period),
+//     {
+//       staleTime: 30000,
+//     }
+//   )
+// }

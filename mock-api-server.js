@@ -225,9 +225,34 @@ const mockMetrics = {
   maxDrawdown: 15.2,
 };
 
+// Tracking closed positions for idempotency
+const closedPositions = new Set();
+
 // Auth endpoints
 app.post('/api/v1/auth/login', (req, res) => {
   const { username, password } = req.body;
+
+  // Validation: Check required fields
+  if (!username) {
+    return res.status(400).json({
+      success: false,
+      error: {
+        code: 'MISSING_FIELD',
+        message: 'username field is required',
+      },
+    });
+  }
+
+  if (!password) {
+    return res.status(400).json({
+      success: false,
+      error: {
+        code: 'MISSING_FIELD',
+        message: 'password field is required',
+      },
+    });
+  }
+
   if (username === 'admin' && password === 'admin123') {
     res.json({
       success: true,
@@ -251,11 +276,39 @@ app.post('/api/v1/auth/login', (req, res) => {
   }
 });
 
+// NEW: Logout endpoint
+app.post('/api/v1/auth/logout', (req, res) => {
+  res.json({
+    success: true,
+    data: {
+      message: 'Logged out successfully',
+    },
+  });
+});
+
 // Token endpoints
 app.get('/api/v1/tokens', (req, res) => {
   res.json({
     success: true,
     data: mockTokens,
+  });
+});
+
+// NEW: Get single token by mint address
+app.get('/api/v1/tokens/:mint', (req, res) => {
+  const token = mockTokens.find(t => t.mint === req.params.mint);
+  if (!token) {
+    return res.status(404).json({
+      success: false,
+      error: {
+        code: 'NOT_FOUND',
+        message: 'Token not found',
+      },
+    });
+  }
+  res.json({
+    success: true,
+    data: token,
   });
 });
 
@@ -267,7 +320,56 @@ app.get('/api/v1/strategies', (req, res) => {
   });
 });
 
+// NEW: Create new strategy
+app.post('/api/v1/strategies', (req, res) => {
+  const { name, type, priority } = req.body;
+
+  if (!name || !type) {
+    return res.status(400).json({
+      success: false,
+      error: {
+        code: 'MISSING_FIELD',
+        message: 'name and type fields are required',
+      },
+    });
+  }
+
+  const newStrategy = {
+    id: `strategy${mockStrategies.length + 1}`,
+    name,
+    type,
+    is_active: false,
+    priority: priority || 50,
+    stats: {
+      totalTrades: 0,
+      winRate: 0,
+      totalPnl: 0,
+      sharpeRatio: 0,
+    },
+  };
+
+  mockStrategies.push(newStrategy);
+
+  res.json({
+    success: true,
+    data: newStrategy,
+  });
+});
+
 app.post('/api/v1/strategies/:id/start', (req, res) => {
+  // Validation: Check if strategy exists
+  const strategy = mockStrategies.find(s => s.id === req.params.id);
+  if (!strategy) {
+    return res.status(404).json({
+      success: false,
+      error: {
+        code: 'NOT_FOUND',
+        message: 'Strategy not found',
+      },
+    });
+  }
+
+  strategy.is_active = true;
   res.json({
     success: true,
     data: { message: 'Strategy started' },
@@ -275,6 +377,19 @@ app.post('/api/v1/strategies/:id/start', (req, res) => {
 });
 
 app.post('/api/v1/strategies/:id/pause', (req, res) => {
+  // Validation: Check if strategy exists
+  const strategy = mockStrategies.find(s => s.id === req.params.id);
+  if (!strategy) {
+    return res.status(404).json({
+      success: false,
+      error: {
+        code: 'NOT_FOUND',
+        message: 'Strategy not found',
+      },
+    });
+  }
+
+  strategy.is_active = false;
   res.json({
     success: true,
     data: { message: 'Strategy paused' },
@@ -289,7 +404,49 @@ app.get('/api/v1/positions', (req, res) => {
   });
 });
 
+// NEW: Get single position by ID
+app.get('/api/v1/positions/:id', (req, res) => {
+  const position = mockPositions.find(p => p.id === req.params.id);
+  if (!position) {
+    return res.status(404).json({
+      success: false,
+      error: {
+        code: 'NOT_FOUND',
+        message: 'Position not found',
+      },
+    });
+  }
+  res.json({
+    success: true,
+    data: position,
+  });
+});
+
 app.post('/api/v1/positions/:id/close', (req, res) => {
+  // Validation: Check if position exists
+  const position = mockPositions.find(p => p.id === req.params.id);
+  if (!position) {
+    return res.status(404).json({
+      success: false,
+      error: {
+        code: 'NOT_FOUND',
+        message: 'Position not found',
+      },
+    });
+  }
+
+  // Idempotency check: Don't close same position twice
+  if (closedPositions.has(req.params.id)) {
+    return res.status(400).json({
+      success: false,
+      error: {
+        code: 'ALREADY_CLOSED',
+        message: 'Position already closed',
+      },
+    });
+  }
+
+  closedPositions.add(req.params.id);
   res.json({
     success: true,
     data: { message: 'Position closed' },
@@ -298,16 +455,57 @@ app.post('/api/v1/positions/:id/close', (req, res) => {
 
 // Trade endpoints
 app.get('/api/v1/trades', (req, res) => {
+  const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
+
+  // Validation: Positive pagination values
+  if (page < 1) {
+    return res.status(400).json({
+      success: false,
+      error: {
+        code: 'INVALID_PARAMETER',
+        message: 'page must be >= 1',
+      },
+    });
+  }
+
+  if (limit < 1 || limit > 100) {
+    return res.status(400).json({
+      success: false,
+      error: {
+        code: 'INVALID_PARAMETER',
+        message: 'limit must be between 1 and 100',
+      },
+    });
+  }
+
   res.json({
     success: true,
     data: mockTrades.slice(0, limit),
     pagination: {
       total: mockTrades.length,
-      page: 1,
+      page: page,
       limit: limit,
       totalPages: Math.ceil(mockTrades.length / limit),
     },
+  });
+});
+
+// NEW: Get single trade by ID
+app.get('/api/v1/trades/:id', (req, res) => {
+  const trade = mockTrades.find(t => t.id === req.params.id);
+  if (!trade) {
+    return res.status(404).json({
+      success: false,
+      error: {
+        code: 'NOT_FOUND',
+        message: 'Trade not found',
+      },
+    });
+  }
+  res.json({
+    success: true,
+    data: trade,
   });
 });
 
@@ -325,6 +523,33 @@ app.get('/api/v1/metrics/summary', (req, res) => {
         failed_trades: Math.floor(mockMetrics.totalTrades * (1 - mockMetrics.winRate / 100)),
         profit_factor: 2.5,
       }
+    },
+  });
+});
+
+// NEW: Get metrics for specific strategy
+app.get('/api/v1/metrics/strategy/:id', (req, res) => {
+  const strategy = mockStrategies.find(s => s.id === req.params.id);
+  if (!strategy) {
+    return res.status(404).json({
+      success: false,
+      error: {
+        code: 'NOT_FOUND',
+        message: 'Strategy not found',
+      },
+    });
+  }
+
+  res.json({
+    success: true,
+    data: {
+      strategy_id: req.params.id,
+      strategy_name: strategy.name,
+      total_trades: strategy.stats.totalTrades,
+      win_rate: strategy.stats.winRate,
+      total_pnl: strategy.stats.totalPnl,
+      sharpe_ratio: strategy.stats.sharpeRatio,
+      avg_profit_per_trade: strategy.stats.totalTrades > 0 ? strategy.stats.totalPnl / strategy.stats.totalTrades : 0,
     },
   });
 });
@@ -364,9 +589,64 @@ app.get('/api/v1/risk/limits', (req, res) => {
 });
 
 app.put('/api/v1/risk/limits', (req, res) => {
+  const {
+    maxPositionSizeSol,
+    maxPositionSizePercent,
+    maxTotalExposureSol,
+    maxPositions,
+    maxLossPerTradeSol,
+    maxDailyLossSol,
+    maxDrawdownPercent,
+  } = req.body;
+
+  // Validation: All numeric values must be positive
+  const numericFields = {
+    maxPositionSizeSol,
+    maxPositionSizePercent,
+    maxTotalExposureSol,
+    maxPositions,
+    maxLossPerTradeSol,
+    maxDailyLossSol,
+    maxDrawdownPercent,
+  };
+
+  for (const [field, value] of Object.entries(numericFields)) {
+    if (value !== undefined && value <= 0) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'INVALID_PARAMETER',
+          message: `${field} must be positive`,
+        },
+      });
+    }
+  }
+
   res.json({
     success: true,
     data: req.body,
+  });
+});
+
+// NEW: Get current risk status
+app.get('/api/v1/risk/status', (req, res) => {
+  const currentExposure = mockPositions.reduce((sum, p) => sum + p.invested_usd, 0);
+  const dailyPnl = mockTrades
+    .filter(t => new Date(t.created_at) > new Date(Date.now() - 86400000))
+    .reduce((sum, t) => sum + (t.pnl_usd || 0), 0);
+
+  res.json({
+    success: true,
+    data: {
+      current_exposure_sol: currentExposure / 20, // Mock SOL conversion
+      current_positions: mockPositions.length,
+      daily_pnl_sol: dailyPnl / 20,
+      daily_loss_sol: dailyPnl < 0 ? Math.abs(dailyPnl / 20) : 0,
+      current_drawdown_percent: 5.2,
+      is_within_limits: true,
+      warnings: [],
+      timestamp: Date.now(),
+    },
   });
 });
 
@@ -386,21 +666,37 @@ app.get('/api/v1/health', (req, res) => {
 server.listen(PORT, () => {
   console.log(`\n🚀 Mock API Server running on http://localhost:${PORT}`);
   console.log(`🔌 WebSocket server running on ws://localhost:${PORT}/ws`);
-  console.log(`📱 Ready to serve frontend at http://localhost:5176`);
+  console.log(`📱 Ready to serve frontend at http://localhost:5173`);
   console.log('\n✅ Available HTTP endpoints:');
-  console.log('   - POST /api/v1/auth/login');
-  console.log('   - GET  /api/v1/tokens');
-  console.log('   - GET  /api/v1/strategies');
-  console.log('   - POST /api/v1/strategies/:id/start');
-  console.log('   - POST /api/v1/strategies/:id/pause');
-  console.log('   - GET  /api/v1/positions');
-  console.log('   - POST /api/v1/positions/:id/close');
-  console.log('   - GET  /api/v1/trades');
-  console.log('   - GET  /api/v1/metrics/summary');
-  console.log('   - GET  /api/v1/metrics/system');
-  console.log('   - GET  /api/v1/risk/limits');
-  console.log('   - PUT  /api/v1/risk/limits');
-  console.log('   - GET  /api/v1/health');
+  console.log('   📝 Authentication:');
+  console.log('      - POST /api/v1/auth/login');
+  console.log('      - POST /api/v1/auth/logout');
+  console.log('   🪙 Tokens:');
+  console.log('      - GET  /api/v1/tokens');
+  console.log('      - GET  /api/v1/tokens/:mint');
+  console.log('   🎯 Strategies:');
+  console.log('      - GET  /api/v1/strategies');
+  console.log('      - POST /api/v1/strategies');
+  console.log('      - POST /api/v1/strategies/:id/start');
+  console.log('      - POST /api/v1/strategies/:id/pause');
+  console.log('   💼 Positions:');
+  console.log('      - GET  /api/v1/positions');
+  console.log('      - GET  /api/v1/positions/:id');
+  console.log('      - POST /api/v1/positions/:id/close');
+  console.log('   📊 Trades:');
+  console.log('      - GET  /api/v1/trades');
+  console.log('      - GET  /api/v1/trades/:id');
+  console.log('   📈 Metrics:');
+  console.log('      - GET  /api/v1/metrics/summary');
+  console.log('      - GET  /api/v1/metrics/strategy/:id');
+  console.log('      - GET  /api/v1/metrics/system');
+  console.log('   🛡️  Risk Control:');
+  console.log('      - GET  /api/v1/risk/limits');
+  console.log('      - PUT  /api/v1/risk/limits');
+  console.log('      - GET  /api/v1/risk/status');
+  console.log('   ❤️  Health:');
+  console.log('      - GET  /api/v1/health');
   console.log('\n✅ WebSocket endpoints:');
-  console.log('   - WS   /ws?token=YOUR_TOKEN\n');
+  console.log('   - WS   /ws?token=YOUR_TOKEN');
+  console.log('\n🎉 All 21 endpoints ready! (7 NEW endpoints added)\n');
 });

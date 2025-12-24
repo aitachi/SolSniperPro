@@ -1,0 +1,12 @@
+[build]
+# Enable vendored OpenSSL on Windows to avoid system dependency issues
+rustflags = []
+
+[target.'cfg(windows)']
+# Use vendored OpenSSL on Windows
+rustflags = []
+
+[env]
+# Force vendored OpenSSL on Windows to avoid system dependency issues
+OPENSSL_STATIC = "1"
+OPENSSL_NO_VENDOR = "0"
